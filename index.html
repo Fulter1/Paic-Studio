@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="description"
+        content="منصة إعداد خطابات نادي البرمجة والذكاء الاصطناعي بجامعة الطائف"
+    >
+
+    <title>منصة خطابات النادي</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- App -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- =========================================================
+         TOP BAR
+    ========================================================== -->
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                <img
+                    src="assets/logo-club.png"
+                    alt="شعار النادي"
+                    data-logo="club"
+                >
+                <span class="logo-fallback">
+                    <i class="fa-solid fa-microchip"></i>
+                </span>
+            </div>
+
+            <div class="brand-text">
+                <strong>منصة خطابات النادي</strong>
+                <span>نادي البرمجة والذكاء الاصطناعي</span>
+            </div>
+
+        </div>
+
+        <div class="topbar-actions">
+
+            <button
+                type="button"
+                class="icon-button"
+                id="themeToggle"
+                title="تغيير المظهر"
+                aria-label="تغيير المظهر"
+            >
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <div class="topbar-status">
+                <span class="status-dot"></span>
+                <span>جاهز للاستخدام</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+    <main class="workspace">
+
+        <!-- =====================================================
+             CONTROL PANEL
+        ====================================================== -->
+        <aside class="control-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        محرر الخطابات
+                    </span>
+
+                    <h1>أنشئ خطابك</h1>
+
+                    <p>
+                        عب البيانات المطلوبة وخل المنصة ترتب الخطاب لك بشكل جاهز للمعاينة والطباعة
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TEMPLATE SECTION
+            ================================================== -->
+            <section class="editor-section">
+
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <div>
+                        <strong>نوع الخطاب</strong>
+                        <span>اختر القالب المناسب</span>
+                    </div>
+                </div>
+
+
+                <div class="template-grid">
+
+                    <button
+                        type="button"
+                        class="template-card active"
+                        data-template="sponsorship"
+                    >
+                        <span class="template-card-icon sponsorship-icon">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </span>
+
+                        <span class="template-card-content">
+                            <strong>طلب رعاية</strong>
+                            <small>رعاية ودعم مبادرة</small>
+                        </span>
+
+                        <span class="template-check">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="template-card"
+                        data-template="partnership"
+                    >
+                        <span class="template-card-icon partnership-icon">
+                            <i class="fa-solid fa-handshake"></i>
+                        </span>
+
+                        <span class="template-card-content">
+                            <strong>شراكة وتعاون</strong>
+                            <small>تعاون بين جهتين</small>
+                        </span>
+
+                        <span class="template-check">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="template-card"
+                        data-template="thanks"
+                    >
+                        <span class="template-card-icon thanks-icon">
+                            <i class="fa-solid fa-award"></i>
+                        </span>
+
+                        <span class="template-card-content">
+                            <strong>شكر وتقدير</strong>
+                            <small>تقدير للمشاركة والدعم</small>
+                        </span>
+
+                        <span class="template-check">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="template-card"
+                        data-template="invitation"
+                    >
+                        <span class="template-card-icon invitation-icon">
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </span>
+
+                        <span class="template-card-content">
+                            <strong>دعوة رسمية</strong>
+                            <small>دعوة لحضور فعالية</small>
+                        </span>
+
+                        <span class="template-check">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAPER SIZE
+            ================================================== -->
+            <section class="editor-section">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        <i class="fa-regular fa-file"></i>
+                    </div>
+
+                    <div>
+                        <strong>حجم الخطاب</strong>
+                        <span>حدد شكل المستند</span>
+                    </div>
+
+                </div>
+
+
+                <div class="size-switch">
+
+                    <button
+                        type="button"
+                        class="size-option active"
+                        data-paper-size="a4"
+                    >
+                        <span class="size-preview a4-mini"></span>
+
+                        <span>
+                            <strong>A4</strong>
+                            <small>خطاب كامل ومفصل</small>
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="size-option"
+                        data-paper-size="square"
+                    >
+                        <span class="size-preview square-mini"></span>
+
+                        <span>
+                            <strong>مربع</strong>
+                            <small>مختصر وأنيق</small>
+                        </span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DATA SECTION
+            ================================================== -->
+            <section class="editor-section">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        <i class="fa-solid fa-address-card"></i>
+                    </div>
+
+                    <div>
+                        <strong>بيانات الخطاب</strong>
+                        <span>المعلومات التي تظهر داخل المستند</span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="field full">
+
+                        <label for="recipient">
+                            <span>الجهة المستلمة</span>
+                            <small>مطلوب</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-building"></i>
+
+                            <input
+                                id="recipient"
+                                type="text"
+                                placeholder="مثال: شركة تقنية"
+                                autocomplete="organization"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="recipientName">
+                            <span>اسم الشخص</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-user"></i>
+
+                            <input
+                                id="recipientName"
+                                type="text"
+                                placeholder="مثال: أحمد خالد"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="date">
+                            <span>التاريخ</span>
+                            <small>مطلوب</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-calendar"></i>
+
+                            <input
+                                id="date"
+                                type="date"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="eventName">
+                            <span>اسم المبادرة أو الفعالية</span>
+                            <small>مطلوب</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-sparkles"></i>
+
+                            <input
+                                id="eventName"
+                                type="text"
+                                placeholder="مثال: ملتقى التقنية والابتكار"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="eventDate">
+                            <span>موعد الفعالية</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-clock"></i>
+
+                            <input
+                                id="eventDate"
+                                type="text"
+                                placeholder="مثال: 15 أكتوبر 2026"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="eventLocation">
+                            <span>الموقع</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <input
+                                id="eventLocation"
+                                type="text"
+                                placeholder="مثال: جامعة الطائف"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="support">
+                            <span>نوع الدعم أو التعاون</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-bullseye"></i>
+
+                            <input
+                                id="support"
+                                type="text"
+                                placeholder="مثال: دعم لوجستي أو رعاية مالية"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="amount">
+                            <span>قيمة الرعاية</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-coins"></i>
+
+                            <input
+                                id="amount"
+                                type="text"
+                                placeholder="مثال: 5,000 ريال"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="message">
+                            <span>النص الإضافي</span>
+                            <small>اختياري</small>
+                        </label>
+
+                        <div class="textarea-wrap">
+
+                            <i class="fa-regular fa-message"></i>
+
+                            <textarea
+                                id="message"
+                                rows="5"
+                                placeholder="اكتب أي تفاصيل إضافية ترغب بظهورها في الخطاب..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PR SECTION
+            ================================================== -->
+            <section class="editor-section">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+                        <strong>العلاقات العامة</strong>
+                        <span>بيانات التواصل والتوقيع</span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label for="prName">
+                            <span>اسم المسؤول</span>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-user"></i>
+
+                            <input
+                                id="prName"
+                                type="text"
+                                placeholder="أحمد خالد"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="prPhone">
+                            <span>رقم التواصل</span>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-phone"></i>
+
+                            <input
+                                id="prPhone"
+                                type="tel"
+                                placeholder="05XXXXXXXX"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="prEmail">
+                            <span>البريد الإلكتروني</span>
+                        </label>
+
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-envelope"></i>
+
+                            <input
+                                id="prEmail"
+                                type="email"
+                                placeholder="club@example.com"
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================== -->
+            <section class="editor-actions">
+
+                <button
+                    type="button"
+                    class="primary-action"
+                    id="demoButton"
+                >
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    تعبئة تجربة
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-action"
+                    id="clearButton"
+                >
+                    <i class="fa-solid fa-rotate-left"></i>
+                    مسح
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-action"
+                    id="copyButton"
+                >
+                    <i class="fa-regular fa-copy"></i>
+                    نسخ النص
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-action"
+                    id="saveButton"
+                >
+                    <i class="fa-regular fa-floppy-disk"></i>
+                    حفظ
+                </button>
+
+                <button
+                    type="button"
+                    class="export-action"
+                    id="pngButton"
+                >
+                    <i class="fa-regular fa-image"></i>
+                    PNG
+                </button>
+
+                <button
+                    type="button"
+                    class="export-action"
+                    id="pdfButton"
+                >
+                    <i class="fa-solid fa-print"></i>
+                    PDF / طباعة
+                </button>
+
+            </section>
+
+
+            <!-- =================================================
+                 SAVED
+            ================================================== -->
+            <section class="saved-section">
+
+                <div class="saved-heading">
+
+                    <div>
+                        <strong>الخطابات المحفوظة</strong>
+                        <span>مسوداتك السابقة</span>
+                    </div>
+
+                    <span id="savedCount">0</span>
+
+                </div>
+
+                <div id="savedLetters" class="saved-list"></div>
+
+            </section>
+
+        </aside>
+
+
+        <!-- =====================================================
+             PREVIEW
+        ====================================================== -->
+        <section class="preview-panel">
+
+            <div class="preview-toolbar">
+
+                <div>
+
+                    <span class="preview-label">
+                        <i class="fa-regular fa-eye"></i>
+                        المعاينة
+                    </span>
+
+                    <strong id="previewTemplateName">
+                        طلب رعاية
+                    </strong>
+
+                </div>
+
+
+                <div class="preview-tools">
+
+                    <span id="previewSizeLabel">A4</span>
+
+                    <button
+                        type="button"
+                        id="fitButton"
+                        class="preview-tool"
+                        title="ملاءمة الصفحة"
+                    >
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="preview-area" id="previewArea">
+
+                <div
+                    id="letterPaper"
+                    class="letter-paper paper-a4 template-sponsorship"
+                >
+
+                    <div id="paperContent"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Toast -->
+<div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+>
+    <i class="fa-solid fa-check"></i>
+    <span></span>
+</div>
+
+
+<!-- html2canvas -->
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+></script>
+
+<script src="content.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
