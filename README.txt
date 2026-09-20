@@ -1,23 +1,21 @@
-PAIC Studio v8 — Clean Enterprise
+PAIC Studio v9
 
-Files:
+النسخة الجديدة تفصل:
 - index.html
 - style.css
-- app.js
 - content.js
+- app.js
 - supabase.sql
-- assets/logo-club.svg
-- assets/logo-university.svg
+- assets/
 
-Deploy:
-1) Upload the whole folder to GitHub.
-2) Import the repository into Vercel as a static project. No build command is required.
-3) In Supabase SQL Editor, run supabase.sql once.
-4) In Supabase Data API settings, make sure paic_letters_v8 is exposed.
-5) The browser uses the Supabase publishable key in app.js. Never replace it with a secret/service_role key.
+التشغيل:
+1) افتح index.html أو ارفع المجلد إلى GitHub ثم Vercel.
+2) في Supabase شغّل supabase.sql.
+3) من Supabase Dashboard فعّل Anonymous Sign-ins:
+   Authentication -> Providers -> Anonymous Sign-ins -> Enable
+4) Data API يجب أن تكون table paic_letters_v9 متاحة.
 
-Cloud note:
-The current lightweight cloud isolation uses a browser-generated client_id plus RLS. It is not an authenticated identity boundary. If letters become confidential or multiple users need accounts, use Supabase Auth and auth.uid() RLS.
+السحابة في v9 تستخدم Supabase Auth Anonymous + RLS بدلاً من client_id القابل للتخمين.
+الـ publishable key مسموح في الواجهة. لا تضع secret/service_role key في الملفات.
 
-PDF:
-The PDF button opens the browser print dialog and lets the user choose Save as PDF. This avoids a heavy client PDF dependency and missing source-map warnings.
+PDF يستخدم نافذة الطباعة -> Save as PDF، ولا يحتاج jsPDF أو node_modules.
