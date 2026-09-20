@@ -1,32 +1,26 @@
-PAIC Studio 3.0 — clean rebuild
+PAIC Studio 3.3 — Clean Edition
 
-Static HTML/CSS/JavaScript modules. No framework or build step.
+هذه النسخة تركز على السرعة وسهولة الاستخدام وجودة الورقة النهائية.
 
-Pages:
-- Dashboard
-- Letter Editor
-- Letter Library
-- Template Studio
-- Content/Snippets Library
-- Settings
+المزايا:
+- واجهة RTL خفيفة ومتجاوبة بالكامل للجوال والتابلت والكمبيوتر.
+- تنقل جانبي على الكمبيوتر وشريط سفلي مناسب للجوال.
+- محرر من 3 خطوات مع معاينة مباشرة.
+- أربع هويات رسمية مختلفة وممتلئة بصريًا.
+- ورقة A4 فعلية 794x1123 مع توزيع رسمي للعناصر.
+- مقاس 1:1 مدعوم.
+- كتابة النص من الصفر أو إدراج نص جاهز ثم تعديله.
+- حفظ محلي سريع بدون انتظار الشبكة.
+- PNG وPDF يتم تنزيلهما مباشرة باسم الجهة.
+- مكتبة خطابات وبحث ونسخ وحذف.
+- Dark / Light / System.
+- Supabase اختياري للمزامنة السحابية.
 
-Core features:
-- Four visual templates
-- A4 and square output
-- Live preview and zoom
-- Auto-save drafts
-- Local-first storage
-- Supabase anonymous cloud sync + RLS
-- Ready-made text snippets + custom snippets
-- Duplicate/edit/delete/search letters
-- Print / Save as PDF
-- Dark / Light / System theme
-- Responsive mobile navigation
+التشغيل:
+1) ارفع المجلد إلى GitHub أو Vercel.
+2) لا يحتاج المشروع إلى build command لأنه HTML/CSS/JS مباشر.
+3) للمزامنة السحابية نفذ supabase.sql في Supabase SQL Editor وفعّل Anonymous Sign-Ins.
+4) إذا لم تستخدم Supabase سيعمل الحفظ المحلي بشكل طبيعي.
 
-Supabase setup:
-1. Enable Anonymous Sign-Ins in Authentication.
-2. Run supabase.sql once in SQL Editor.
-3. Keep the publishable key in js/config.js; never use a service_role/secret key.
-4. Deploy the folder to GitHub/Vercel.
-
-If Supabase is unavailable, local storage continues to work.
+ملاحظة:
+تم تجنب الاعتماد على مكتبات UI خارجية حتى تبقى النسخة سريعة وخفيفة.
