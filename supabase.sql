@@ -1,24 +1,9 @@
 create table if not exists public.paic_letters_v13 (
- id uuid primary key default gen_random_uuid(),
- owner_id uuid not null references auth.users(id) on delete cascade,
- is_anonymous boolean not null default true,
- letter_number text not null,
- template text not null,
- size text not null default 'a4',
- recipient text not null,
- recipient_name text,
- event_name text not null,
- date date not null,
- extra_param text,
- value text,
- message text not null,
- pr_name text,
- pr_contact text,
- pr_email text,
- digital_stamp boolean not null default true,
- created_at timestamptz not null default now(),
- updated_at timestamptz not null default now(),
- unique(owner_id, letter_number)
+ id uuid primary key default gen_random_uuid(), owner_id uuid not null references auth.users(id) on delete cascade,
+ is_anonymous boolean not null default true, letter_number text not null, template text not null, size text not null default 'a4',
+ recipient text not null, recipient_name text, event_name text not null, date date not null, extra_param text, value text,
+ message text not null, pr_name text, pr_contact text, pr_email text, digital_stamp boolean not null default true,
+ created_at timestamptz not null default now(), updated_at timestamptz not null default now(), unique(owner_id,letter_number)
 );
 alter table public.paic_letters_v13 enable row level security;
 drop policy if exists paic_letters_select on public.paic_letters_v13;

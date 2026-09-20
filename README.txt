@@ -1,17 +1,32 @@
-PAIC Studio Elite
+PAIC Studio 2.0 — rebuilt from scratch.
 
-Static HTML/CSS/JavaScript application for official PAIC letters.
+Structure:
+- index.html
+- css/app.css
+- js/config.js
+- js/templates.js
+- js/store.js
+- js/cloud.js
+- js/document.js
+- js/main.js
+- assets/
+- supabase.sql
+- vercel.json
 
-Run locally with any static server. Do not open index.html directly if your browser blocks ES modules from file://.
+Features:
+- RTL Arabic workspace with right sidebar
+- Dashboard / Editor / Library / Templates / Snippets / Settings
+- Dark / Light / System theme
+- Four visual document templates
+- Ready snippets + custom snippets
+- Autosave draft + local library
+- Supabase anonymous sync + RLS
+- A4 and 1:1 preview
+- Print / PDF via browser print
 
-Example:
-python3 -m http.server 4173
-then open http://localhost:4173
-
-Supabase:
-1. Enable Anonymous Sign-Ins in Authentication.
+Cloud setup:
+1. Enable Anonymous Sign-Ins in Supabase Authentication.
 2. Run supabase.sql in SQL Editor.
-3. Keep the publishable key in js/config.js only; never use a service_role/secret key.
-4. Deploy the folder to Vercel as a static project.
+3. Deploy the folder to GitHub/Vercel.
 
-The app works locally without Supabase. Cloud sync requires the Supabase project above and anonymous sign-in.
+The browser key is a publishable key. Do not replace it with a service_role or secret key.
