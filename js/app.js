@@ -1,7 +1,7 @@
 import { CONFIG, PAIC_CONTENT } from './data.js';
 import { FIELD_IDS, buildPaper, buildRecord, copyText, validateRecord } from './document.js';
 import { authenticate, getUserId, requestCloud } from './cloud.js';
-import { clearDraft, dequeueDelete, getDeleteQueue, getDraft, getRecords, migrateLegacyStorage, nextLetterNumber, queueDelete, removeRecord, saveDraft, saveRecords, upsertRecord } from './storage.js';
+import { clearDraft, dequeueDelete, getDeleteQueue, getDraft, getRecords, migrateLegacyStorage, nextLetterNumber, queueDelete, removeRecord, saveDraft, saveRecords, syncSequence, upsertRecord } from './storage.js';
 
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -186,6 +186,14 @@ function persistDraft() {
   saveDraft(currentRecord());
 }
 
+function nextStep() {
+  if (state.step < 3) {
+    setStep(state.step + 1);
+    return;
+  }
+  save();
+}
+
 function setStep(step) {
   state.step = Math.max(1, Math.min(3, step));
   ui.renderSteps();
@@ -255,34 +263,51 @@ function validateBeforeSave(record) {
 
 async function save() {
   if (state.saving) return;
-  const record = currentRecord();
-  if (!validateBeforeSave(record)) return;
+
+  const draftRecord = currentRecord();
+  if (!validateBeforeSave(draftRecord)) return;
 
   state.saving = true;
-  upsertRecord(record);
-  state.id = record.id;
-  state.number = record.letter_number;
-  state.records = getRecords();
-  renderLibrary();
-  ui.setCloudStatus('جاري الحفظ', 'busy');
+  let record = draftRecord;
 
   try {
-    await requestCloud(`?on_conflict=id`, {
-      method: 'POST',
-      headers: { Prefer: 'return=minimal,resolution=merge-duplicates' },
-      body: JSON.stringify(record)
-    });
-    clearDraft();
-    ui.setCloudStatus('متزامن مع السحابة', 'ok');
-    ui.toast('تم حفظ الخطاب بنجاح');
-  } catch {
-    ui.setCloudStatus('محفوظ محليًا', 'warn');
-    ui.toast('حُفظ محليًا — ستتم المزامنة عند توفر السحابة');
+    ui.setCloudStatus('جاري الحفظ', 'busy');
+    try {
+      await authenticate();
+      record = currentRecord();
+    } catch {
+      record = draftRecord;
+    }
+
+    upsertRecord(record);
+    state.id = record.id;
+    state.number = record.letter_number;
+    state.records = getRecords();
+    renderLibrary();
+
+    if (!record.owner_id) {
+      ui.setCloudStatus('محفوظ محليًا', 'warn');
+      ui.toast('تم حفظ الخطاب محليًا');
+      return;
+    }
+
+    try {
+      await requestCloud(`?on_conflict=id`, {
+        method: 'POST',
+        headers: { Prefer: 'return=minimal,resolution=merge-duplicates' },
+        body: JSON.stringify(record)
+      });
+      clearDraft();
+      ui.setCloudStatus('متزامن مع السحابة', 'ok');
+      ui.toast('تم حفظ الخطاب بنجاح');
+    } catch {
+      ui.setCloudStatus('محفوظ محليًا', 'warn');
+      ui.toast('حُفظ محليًا — ستتم المزامنة عند توفر السحابة');
+    }
   } finally {
     state.saving = false;
   }
 }
-
 function renderLibrary() {
   const query = value('librarySearch').trim().toLocaleLowerCase('ar');
   const records = state.records
@@ -354,6 +379,7 @@ async function loadCloud() {
     const merged = new Map();
     [...local, ...remote].forEach(record => { if (!deleted.has(record.id)) merged.set(record.id, record); });
     state.records = [...merged.values()];
+    syncSequence(state.records);
     saveRecords(state.records);
     ui.setCloudStatus('السحابة متصلة', 'ok');
     renderLibrary();
@@ -409,6 +435,7 @@ function boot() {
   ui.bind();
   updateNavigation();
   renderLibrary();
+  requestAnimationFrame(() => ui.fitPreview());
   loadCloud();
 }
 

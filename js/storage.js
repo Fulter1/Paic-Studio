@@ -69,9 +69,25 @@ export function saveSession(session) {
 }
 export function clearSession() { localStorage.removeItem(sessionKey); }
 
+function sequenceFromRecords(records) {
+  const year = new Date().getFullYear();
+  return records.reduce((max, record) => {
+    const match = String(record?.letter_number || '').match(new RegExp(`^PAIC-${year}-(\\d+)$`));
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+}
+
+export function syncSequence(records = []) {
+  const stored = Number(localStorage.getItem(CONFIG.sequenceKey) || 0);
+  const detected = sequenceFromRecords(records);
+  const current = Number.isFinite(stored) ? stored : 0;
+  const nextBase = Math.max(current, detected);
+  localStorage.setItem(CONFIG.sequenceKey, String(nextBase));
+  return nextBase;
+}
+
 export function nextLetterNumber() {
-  const current = Number(localStorage.getItem(CONFIG.sequenceKey) || 0);
-  const next = Number.isFinite(current) && current >= 0 ? current + 1 : 1;
+  const next = syncSequence(getRecords()) + 1;
   localStorage.setItem(CONFIG.sequenceKey, String(next));
   return `PAIC-${new Date().getFullYear()}-${String(next).padStart(4, '0')}`;
 }
@@ -83,5 +99,6 @@ export function migrateLegacyStorage() {
   if (!legacy.length) return [];
   const migrated = mergeRecords([], legacy);
   saveRecords(migrated);
+  syncSequence(migrated);
   return migrated;
 }

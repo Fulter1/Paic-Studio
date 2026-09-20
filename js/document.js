@@ -11,7 +11,8 @@ function formatDate(value) {
 }
 
 function uid() {
-  return crypto.randomUUID();
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
 export const FIELD_IDS = ['recipient', 'recipientName', 'date', 'eventName', 'extraParam', 'value', 'message', 'prName', 'prContact', 'prEmail'];

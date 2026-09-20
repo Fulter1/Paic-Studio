@@ -1,10 +1,10 @@
 export const CONFIG = Object.freeze({
-  appKey: 'paic_v16',
-  legacyKeys: ['paic_v15', 'paic_v14', 'paic_v13'],
-  sequenceKey: 'paic_v16_sequence',
-  themeKey: 'paic_v16_theme',
-  draftKey: 'paic_v16_draft',
-  deleteQueueKey: 'paic_v16_delete_queue',
+  appKey: 'paic_v19',
+  legacyKeys: ['paic_v18', 'paic_v17', 'paic_v16', 'paic_v15', 'paic_v14', 'paic_v13'],
+  sequenceKey: 'paic_v19_sequence',
+  themeKey: 'paic_v19_theme',
+  draftKey: 'paic_v19_draft',
+  deleteQueueKey: 'paic_v19_delete_queue',
   supabase: Object.freeze({
     url: 'https://ddwekucnbmzktbzaoxmj.supabase.co',
     key: 'sb_publishable_bPLVqBXOMQc0DZj3UIz2tg_o0KR8llE',
@@ -16,7 +16,7 @@ export const CONFIG = Object.freeze({
 });
 
 
-window.PAIC_CONTENT = {
+export const PAIC_CONTENT = {
   brand: {
     club: 'نادي البرمجة والذكاء الاصطناعي',
     college: 'كلية الحاسبات وتقنية المعلومات',
