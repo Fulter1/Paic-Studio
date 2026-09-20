@@ -1,4 +1,4 @@
-PAIC Studio v13
+PAIC Studio v14
 
 Production-ready static build for GitHub + Vercel.
 
