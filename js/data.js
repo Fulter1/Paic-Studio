@@ -1,10 +1,10 @@
 export const CONFIG = Object.freeze({
-  appKey: 'paic_v19',
-  legacyKeys: ['paic_v18', 'paic_v17', 'paic_v16', 'paic_v15', 'paic_v14', 'paic_v13'],
-  sequenceKey: 'paic_v19_sequence',
-  themeKey: 'paic_v19_theme',
-  draftKey: 'paic_v19_draft',
-  deleteQueueKey: 'paic_v19_delete_queue',
+  appKey: 'paic_v21',
+  legacyKeys: ['paic_v20', 'paic_v19', 'paic_v18', 'paic_v17', 'paic_v16', 'paic_v15', 'paic_v14', 'paic_v13'],
+  sequenceKey: 'paic_v21_sequence',
+  themeKey: 'paic_v21_theme',
+  draftKey: 'paic_v21_draft',
+  deleteQueueKey: 'paic_v21_delete_queue',
   supabase: Object.freeze({
     url: 'https://ddwekucnbmzktbzaoxmj.supabase.co',
     key: 'sb_publishable_bPLVqBXOMQc0DZj3UIz2tg_o0KR8llE',
