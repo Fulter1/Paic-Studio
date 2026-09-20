@@ -1,6 +1,6 @@
 const SUPA={url:'https://ddwekucnbmzktbzaoxmj.supabase.co',key:'sb_publishable_bPLVqBXOMQc0DZj3UIz2tg_o0KR8llE',table:'paic_letters_v13'};
 const C=window.PAIC_CONTENT;const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
-const KEY='paic_v14';
+const KEY='paic_v15';
 const state={template:'sponsorship',size:'a4',step:1,zoom:.7,id:null,number:null,cloud:'local',records:[],saving:false};
 const fields=['recipient','recipientName','date','eventName','extraParam','value','message','prName','prContact','prEmail'];
 let SESSION=null;
