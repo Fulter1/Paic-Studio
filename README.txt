@@ -1,33 +1,17 @@
-PAIC Studio — Rebuilt Edition
+PAIC Studio Elite
 
-هذه النسخة أعيد بناؤها من الصفر بهيكل Vanilla HTML/CSS/JavaScript Modules.
-لا تعتمد على كود الواجهة القديم.
+Static HTML/CSS/JavaScript application for official PAIC letters.
 
-الأقسام:
-- لوحة التحكم
-- إنشاء خطاب
-- المحفوظات
-- القوالب
-- الإعدادات
+Run locally with any static server. Do not open index.html directly if your browser blocks ES modules from file://.
 
-المحرر:
-- 4 قوالب
-- A4 و 1:1
-- معاينة مباشرة
-- تكبير وملاءمة
-- حفظ محلي تلقائي
-- مسودة
-- طباعة / PDF
-- نسخ النص
-- فتح وتعديل وحذف
+Example:
+python3 -m http.server 4173
+then open http://localhost:4173
 
-السحابة:
-1. افتح Supabase.
-2. فعّل Anonymous Sign-Ins.
-3. نفذ supabase.sql كاملًا في SQL Editor.
-4. تأكد أن publishable key في js/data.js يخص نفس المشروع.
-5. ارفع المشروع إلى GitHub ثم اربطه بـ Vercel.
+Supabase:
+1. Enable Anonymous Sign-Ins in Authentication.
+2. Run supabase.sql in SQL Editor.
+3. Keep the publishable key in js/config.js only; never use a service_role/secret key.
+4. Deploy the folder to Vercel as a static project.
 
-المشروع لا يحتوي على service_role أو secret key. صلاحيات قاعدة البيانات محكومة بـ RLS ومالك السجل.
-
-ملاحظة: Anonymous Auth مرتبط بمتصفح المستخدم. إذا تم مسح بيانات المتصفح قد يفقد المستخدم جلسة المستخدم المجهول السابقة، لذلك التخزين المحلي والسحابي لا يمثلان نظام حسابات.
+The app works locally without Supabase. Cloud sync requires the Supabase project above and anonymous sign-in.

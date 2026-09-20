@@ -1,61 +1,12 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080b18"><meta name="color-scheme" content="dark light"><meta name="description" content="PAIC Studio — مساحة احترافية لإنشاء وإدارة الخطابات الرسمية">
-<title>PAIC Studio</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080a14"><meta name="description" content="PAIC Studio - منصة إنشاء الخطابات الرسمية">
+<title>PAIC Studio</title><link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<div id="app" class="app">
-  <aside class="sidebar" id="sidebar">
-    <a class="brand" href="#home" aria-label="PAIC Studio"><span class="brand-logo"><img src="assets/logo-club.svg" alt=""></span><span><b>PAIC</b><small>STUDIO</small></span></a>
-    <div class="workspace-badge"><span class="status-dot"></span><div><strong>مساحة العمل</strong><small>نادي البرمجة والذكاء الاصطناعي</small></div></div>
-    <nav class="nav" aria-label="التنقل">
-      <div class="nav-title">الرئيسية</div>
-      <a href="#home" data-route="home" class="nav-item"><span class="nav-icon">⌂</span><span>لوحة التحكم</span></a>
-      <a href="#create" data-route="create" class="nav-item"><span class="nav-icon">＋</span><span>إنشاء خطاب</span><kbd>N</kbd></a>
-      <div class="nav-title">إدارة الخطابات</div>
-      <a href="#library" data-route="library" class="nav-item"><span class="nav-icon">▤</span><span>المحفوظات</span><em id="navCount">0</em></a>
-      <a href="#templates" data-route="templates" class="nav-item"><span class="nav-icon">◇</span><span>القوالب</span></a>
-    </nav>
-    <div class="sidebar-bottom">
-      <a href="#settings" data-route="settings" class="nav-item"><span class="nav-icon">⚙</span><span>الإعدادات</span></a>
-      <div class="sync-card"><span class="sync-indicator" id="syncDot"></span><div><strong id="syncTitle">تخزين محلي</strong><small id="syncText">البيانات محفوظة على جهازك</small></div></div>
-      <div class="university"><img src="assets/logo-university.svg" alt=""><span>جامعة الطائف<small>كلية الحاسبات وتقنية المعلومات</small></span></div>
-    </div>
-  </aside>
-  <div class="backdrop" id="backdrop"></div>
-  <section class="main">
-    <header class="topbar">
-      <button class="icon-btn mobile-only" id="menuBtn" aria-label="فتح القائمة">☰</button>
-      <div class="crumb"><span>PAIC Studio</span><i>/</i><strong id="pageTitle">لوحة التحكم</strong></div>
-      <div class="topbar-actions">
-        <div class="save-state" id="saveState"><span></span><label>محلي</label></div>
-        <button class="icon-btn" id="themeBtn" aria-label="تغيير المظهر">◐</button>
-        <a class="btn primary" href="#create">خطاب جديد <b>↗</b></a>
-      </div>
-    </header>
-    <main id="view" class="view"></main>
-  </section>
-</div>
+<div id="app" class="app"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<template id="homeTemplate"><section class="page home-page">
-  <div class="hero"><div class="hero-copy"><span class="eyebrow"><i></i> PAIC DOCUMENT WORKSPACE</span><h1>كل خطاب يبدأ<br><strong>بمساحة مرتبة.</strong></h1><p>أنشئ الخطابات الرسمية بسرعة، اختر الهوية المناسبة، راجع النتيجة لحظيًا واحفظ كل نسخة في مكتبة واحدة.</p><div class="hero-actions"><a class="btn primary large" href="#create">إنشاء خطاب جديد <b>↗</b></a><a class="btn secondary large" href="#templates">استكشف القوالب</a></div><div class="hero-meta"><span><b>04</b> قوالب</span><span><b>A4</b> جاهز للطباعة</span><span><b>∞</b> محفوظات</span></div></div><div class="hero-art"><div class="glow"></div><div class="art-card"><div class="art-top"><img src="assets/logo-university.svg" alt=""><span>PAIC / OFFICIAL<br><b>DOCUMENT</b></span><img src="assets/logo-club.svg" alt=""></div><div class="art-line"></div><small>خطاب رسمي</small><h3>طلب رعاية</h3><div class="art-placeholder"><i></i><i></i><i></i><i></i></div><div class="art-bottom"><span>PAIC Studio</span><strong>2026</strong></div></div><span class="floating one">LIVE PREVIEW</span><span class="floating two">A4 READY</span></div></div>
-  <div class="section-head"><div><span class="section-label">OVERVIEW</span><h2>نظرة سريعة</h2></div><a href="#library" class="link">عرض المحفوظات ←</a></div>
-  <div class="stats"><article><span class="stat-icon">▤</span><div><small>إجمالي الخطابات</small><strong id="statTotal">0</strong></div><em>المكتبة</em></article><article><span class="stat-icon cyan">✦</span><div><small>خطابات هذا العام</small><strong id="statYear">0</strong></div><em id="statYearLabel">2026</em></article><article><span class="stat-icon violet">◇</span><div><small>آخر قالب</small><strong id="statTemplate">—</strong></div><em>النشاط الأخير</em></article><article><span class="stat-icon green">✓</span><div><small>الحفظ</small><strong id="statCloud">محلي</strong></div><em>جاهز</em></article></div>
-  <div class="home-grid"><section class="panel recent"><div class="panel-head"><div><span class="section-label">RECENT</span><h3>آخر الخطابات</h3></div><a href="#library">عرض الكل</a></div><div id="recentList" class="recent-list"></div></section><section class="panel starter"><div class="panel-head"><div><span class="section-label">QUICK START</span><h3>ابدأ من قالب</h3></div></div><div id="quickTemplates" class="quick-grid"></div></section></div>
-</section></template>
-<template id="createTemplate"><section class="page create-page"><div class="page-heading"><div><span class="section-label">DOCUMENT BUILDER</span><h1>إنشاء خطاب</h1><p>بيانات منظمة على اليمين وورقة رسمية حية على اليسار.</p></div><div class="heading-actions"><span class="draft-status" id="draftStatus"><i></i> مسودة محفوظة</span><button class="btn secondary" id="resetDraft">مسودة جديدة</button></div></div>
-  <div class="builder"><section class="builder-form panel"><div class="builder-head"><div><span class="section-label">EDITOR</span><h2>تفاصيل الخطاب</h2></div><span class="doc-number" id="editorNumber">—</span></div>
-    <div class="tabs" role="tablist"><button class="tab active" data-tab="identity">الهوية</button><button class="tab" data-tab="details">البيانات</button><button class="tab" data-tab="content">المحتوى</button></div>
-    <div class="form-pane active" data-pane="identity"><div class="pane-title"><div><span>01</span><h3>القالب والمقاس</h3></div><small>اختر الهوية قبل الكتابة</small></div><div id="editorTemplates" class="editor-templates"></div><div class="field-block"><div><strong>مقاس المستند</strong><small>A4 رسمي أو مربع للاستخدامات المختصرة</small></div><div class="segmented"><button class="active" data-size="a4">A4</button><button data-size="square">1:1</button></div></div></div>
-    <div class="form-pane" data-pane="details"><div class="pane-title"><div><span>02</span><h3>بيانات الخطاب</h3></div><small>الحقول المطلوبة تظهر بعلامة *</small></div><div class="form-grid"><label><span>الجهة <b>*</b></span><input id="recipient" maxlength="180" placeholder="اسم الجهة"></label><label><span>اسم المسؤول</span><input id="recipientName" maxlength="180" placeholder="اختياري"></label><label><span>التاريخ <b>*</b></span><input id="date" type="date"></label><label><span>الفعالية / المبادرة <b>*</b></span><input id="eventName" maxlength="220" placeholder="اسم الفعالية أو المبادرة"></label><label class="full"><span id="extraLabel">نوع / شكل الرعاية</span><input id="extraParam" maxlength="220" placeholder="التفاصيل المرتبطة بالقالب"></label><label><span>القيمة</span><input id="value" maxlength="100" placeholder="10,000 ريال"></label></div></div>
-    <div class="form-pane" data-pane="content"><div class="pane-title"><div><span>03</span><h3>المحتوى والتواصل</h3></div><small>يمكنك تعديل النص كما تريد</small></div><label class="textarea-field"><span>نص الخطاب <b>*</b></span><textarea id="message" maxlength="12000" rows="12"></textarea><small>استخدم الحقول بين [ ] لإدخال بيانات الخطاب تلقائيًا.</small></label><div class="form-grid"><label><span>مسؤول العلاقات العامة</span><input id="prName" maxlength="120" placeholder="قسم العلاقات العامة"></label><label><span>رقم التواصل</span><input id="prContact" maxlength="40" placeholder="05xxxxxxxx"></label><label class="full"><span>البريد الإلكتروني</span><input id="prEmail" maxlength="180" type="email" placeholder="name@example.com"></label></div><label class="check-row"><input id="digitalStamp" type="checkbox" checked><span class="check-ui"></span><div><strong>ختم PAIC الرقمي</strong><small>يظهر كعلامة مرجعية هادئة داخل الخطاب.</small></div></label></div>
-    <div class="builder-footer"><button class="btn secondary" id="prevTab">السابق</button><button class="btn primary" id="nextTab">التالي <b>←</b></button></div>
-  </section><section class="preview panel"><div class="preview-head"><div><span class="section-label">LIVE PREVIEW</span><h3 id="previewMeta">A4 · طلب رعاية</h3></div><div class="zoom"><button id="zoomOut">−</button><b id="zoomValue">70%</b><button id="zoomIn">+</button><button id="fitZoom">ملاءمة</button></div></div><div class="paper-stage" id="paperStage"><div id="paperFrame"><article id="paper"></article></div></div><div class="preview-footer"><div><small>DOCUMENT</small><strong id="previewNumber">—</strong></div><div class="preview-actions"><button class="btn secondary" id="copyText">نسخ النص</button><button class="btn secondary" id="printDoc">طباعة / PDF</button><button class="btn primary" id="saveDoc">حفظ الخطاب <b>↗</b></button></div></div></section></div>
-</section></template>
-<template id="libraryTemplate"><section class="page"><div class="page-heading"><div><span class="section-label">DOCUMENT LIBRARY</span><h1>المحفوظات</h1><p>كل خطاباتك السابقة، مرتبة وقابلة للبحث والتعديل.</p></div><a href="#create" class="btn primary">إنشاء خطاب <b>↗</b></a></div><div class="library-tools panel"><div class="search"><span>⌕</span><input id="librarySearch" type="search" placeholder="ابحث بالجهة أو رقم الخطاب أو الفعالية"></div><button class="btn secondary" id="refreshLibrary">تحديث</button></div><div class="library-info"><span id="libraryCount">0 خطاب</span><span id="libraryMode">التخزين المحلي</span></div><div id="libraryList" class="library-list"></div></section></template>
-<template id="templatesTemplate"><section class="page"><div class="page-heading"><div><span class="section-label">VISUAL SYSTEM</span><h1>القوالب</h1><p>اختر الهوية التي تناسب نوع الخطاب ثم ابدأ الكتابة.</p></div><a href="#create" class="btn primary">ابدأ الآن <b>↗</b></a></div><div id="templateCatalog" class="template-catalog"></div></section></template>
-<template id="settingsTemplate"><section class="page"><div class="page-heading"><div><span class="section-label">PREFERENCES</span><h1>الإعدادات</h1><p>تحكم في المظهر والتخزين وطريقة عرض مساحة العمل.</p></div></div><div class="settings-grid"><section class="panel settings-panel"><div class="panel-head"><div><span class="section-label">APPEARANCE</span><h3>المظهر</h3></div></div><div class="setting-row"><div><strong>الثيم</strong><small>يتبع إعداد الجهاز أو تختار يدويًا</small></div><div class="theme-options"><button data-theme-choice="system">النظام</button><button data-theme-choice="light">فاتح</button><button data-theme-choice="dark">داكن</button></div></div></section><section class="panel settings-panel"><div class="panel-head"><div><span class="section-label">STORAGE</span><h3>التخزين</h3></div></div><div class="setting-row"><div><strong>المحفوظات المحلية</strong><small>تظل البيانات على جهازك حتى تمسحها</small></div><strong id="recordsSetting">0</strong></div><div class="setting-row"><div><strong>المزامنة السحابية</strong><small id="cloudSetting">تعمل عند توفر Supabase</small></div><span class="setting-status" id="cloudSettingStatus">محلي</span></div><button class="danger-btn" id="clearLocal">مسح البيانات المحلية</button></section><section class="panel about"><img src="assets/logo-club.svg" alt=""><div><span class="section-label">ABOUT</span><h3>PAIC Studio</h3><p>مساحة عمل الخطابات الرسمية لنادي البرمجة والذكاء الاصطناعي<br>كلية الحاسبات وتقنية المعلومات · جامعة الطائف</p><small>نسخة جديدة مبنية من الصفر</small></div></section></div></section></template>
-<script type="module" src="js/app.js"></script>
+<script type="module" src="js/main.js"></script>
 </body></html>
