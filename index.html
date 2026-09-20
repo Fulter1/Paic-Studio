@@ -1,78 +1,45 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f1ea">
-<meta name="description" content="PAIC Studio — منصة إنشاء الخطابات الرسمية">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self' https://ddwekucnbmzktbzaoxmj.supabase.co; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
-<title>PAIC Studio</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070914"><meta name="description" content="PAIC Studio — إنشاء الخطابات الرسمية">
+<link rel="stylesheet" href="style.css"><title>PAIC Studio</title>
 </head>
 <body>
-<div class="app">
-<header class="topbar">
-  <a href="#" class="brand" id="brandHome"><span class="brand-logo"><img src="assets/logo-club.svg" alt="PAIC"></span><span><strong>PAIC</strong><small>استوديو الخطابات</small></span></a>
-  <div class="topbar-center"><span class="live-dot"></span><span id="saveStateText">مسودة محلية</span></div>
-  <div class="top-actions">
-    <button class="icon-button" id="themeBtn" aria-label="تغيير المظهر" title="تغيير المظهر">◐</button>
-    <button class="secondary-button" id="libraryBtn">المحفوظات</button>
-    <button class="primary-button" id="newBtn">خطاب جديد</button>
-  </div>
+<div class="shell">
+<header class="nav">
+  <a class="brand" href="#home"><span class="brand-mark"><img src="assets/logo-club.svg" alt="PAIC"></span><span><b>PAIC</b><small>STUDIO</small></span></a>
+  <nav><a class="nav-link active" href="#home">الرئيسية</a><a class="nav-link" href="#create">إنشاء خطاب</a><a class="nav-link" href="#library">المحفوظات</a></nav>
+  <div class="nav-actions"><button class="ghost" id="themeBtn" title="المظهر">◐</button><button class="primary" id="newBtn">خطاب جديد <span>↗</span></button></div>
 </header>
 
-<main class="workspace">
-  <section class="control-column">
-    <div class="mobile-switch"><button class="active" data-view="editor">تحرير</button><button data-view="preview">المعاينة</button></div>
-    <div class="control-scroll">
-      <div class="page-intro"><span class="kicker">DOCUMENT STUDIO</span><h1>خطاب رسمي<br><em>جاهز للإرسال.</em></h1><p>اختر نوع الخطاب، عب البيانات، وشاهد النسخة النهائية لحظيًا.</p></div>
-
-      <section class="section-block">
-        <div class="section-title"><span>01</span><div><b>نوع الخطاب</b><small>كل نوع له هوية ورقة مختلفة</small></div></div>
-        <div class="template-list" id="templateGrid"></div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-title"><span>02</span><div><b>البيانات</b><small>المعلومات الأساسية للخطاب</small></div></div>
-        <div class="fields">
-          <label class="field full"><span>الجهة <i>*</i></span><input id="recipient" placeholder="اسم الجهة" autocomplete="organization"></label>
-          <label class="field"><span>اسم المسؤول</span><input id="recipientName" placeholder="اختياري"></label>
-          <label class="field"><span>التاريخ <i>*</i></span><input id="date" type="date"></label>
-          <label class="field full"><span>الفعالية / المبادرة <i>*</i></span><input id="eventName" placeholder="اسم الفعالية أو المبادرة"></label>
-          <label class="field full"><span id="extraLabel">نوع / شكل الرعاية</span><input id="extraParam" placeholder=""></label>
-          <label class="field full"><span>القيمة <small>اختياري</small></span><input id="value" placeholder="مثال: 10,000 ريال"></label>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-title"><span>03</span><div><b>نص الخطاب</b><small>النص الرسمي قابل للتعديل</small></div></div>
-        <label class="field"><textarea id="message" rows="15" spellcheck="false"></textarea></label>
-      </section>
-
-      <section class="section-block">
-        <div class="section-title"><span>04</span><div><b>التواصل والإخراج</b><small>يظهر في نهاية الوثيقة</small></div></div>
-        <div class="fields">
-          <label class="field"><span>اسم المسؤول</span><input id="prName" placeholder="العلاقات العامة"></label>
-          <label class="field"><span>رقم التواصل</span><input id="prContact" inputmode="tel" placeholder="05xxxxxxxx"></label>
-          <label class="field full"><span>البريد الإلكتروني</span><input id="prEmail" type="email" placeholder="name@example.com"></label>
-        </div>
-        <div class="output-row"><div><b>مقاس الورقة</b><small>يُطبق على المعاينة والطباعة</small></div><div class="segmented"><button data-size="a4" class="active">A4</button><button data-size="square">مربع</button></div></div>
-        <label class="check-row"><input id="digitalStamp" type="checkbox" checked><span class="fake-check"></span><span><b>الختم الرقمي</b><small>هوية PAIC مرجعية وليست ختمًا حكوميًا</small></span></label>
-      </section>
-
-      <div class="save-area"><button class="primary-button large" id="saveBtn">حفظ الخطاب</button><span>يحفظ محليًا فورًا، ثم يحاول المزامنة مع السحابة.</span></div>
-    </div>
-  </section>
-
-  <section class="preview-column">
-    <div class="preview-toolbar"><div><span>المعاينة</span><b id="previewMeta">A4 · طلب رعاية</b></div><div class="preview-controls"><button id="fitBtn">ملاءمة</button><button id="zoomOut">−</button><strong id="zoomValue">72%</strong><button id="zoomIn">+</button></div></div>
-    <div class="paper-stage" id="paperStage"><div class="paper-frame" id="paperFrame"><article class="paper" id="paper"></article></div></div>
-    <div class="preview-actions"><button id="printBtn">طباعة</button><button id="pdfBtn">PDF</button><button class="primary-button" id="copyBtn">نسخ النص</button></div>
-  </section>
+<main id="home">
+<section class="hero">
+  <div class="hero-copy"><div class="eyebrow"><i></i> PAIC · DOCUMENT STUDIO</div><h1>خطاباتك الرسمية<br><span>بشكل يليق بها.</span></h1><p>أنشئ خطابًا رسميًا مرتبًا خلال دقائق، مع معاينة مباشرة وقوالب مصممة لكل نوع من الخطابات.</p><div class="hero-actions"><button class="primary big" id="heroCreate">ابدأ خطابًا جديدًا <span>↗</span></button><button class="outline big" id="heroLibrary">الخطابات المحفوظة</button></div><div class="hero-note"><span>01</span><span>اختيار القالب</span><b>·</b><span>02</span><span>تعبئة البيانات</span><b>·</b><span>03</span><span>تصدير الخطاب</span></div></div>
+  <div class="hero-art"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="grid"></div><div class="floating-card"><small>PAIC / LETTER</small><b>جاهز للإرسال</b><span>رقم الخطاب · 2026</span></div><div class="mini-paper"><div></div><div></div><div></div><i></i></div></div>
+</section>
+<section class="trust"><div><b>أربع هويات</b><span>لكل نوع خطاب تصميم مستقل</span></div><div><b>A4 / 1:1</b><span>مقاسات جاهزة للطباعة</span></div><div><b>Cloud</b><span>حفظ ومزامنة السجلات</span></div></section>
 </main>
 
-<div class="modal" id="libraryModal" aria-hidden="true"><div class="modal-card"><div class="modal-header"><div><span>LIBRARY</span><h2>الخطابات المحفوظة</h2></div><button class="close" data-close="libraryModal">×</button></div><input class="search" id="librarySearch" placeholder="ابحث بالجهة أو رقم الخطاب أو الفعالية"><div id="recordsList" class="records"></div></div></div>
-<div class="toast" id="toast" role="status"></div>
+<section id="create" class="studio-section">
+<div class="section-head"><div><span class="eyebrow">CREATE / 01</span><h2>أنشئ خطابك</h2><p>اختصرها: اختر، عب، راجع، ثم صدّر.</p></div><div class="save-pill" id="saveState"><i></i>محلي</div></div>
+<div class="studio">
+<aside class="editor">
+  <div class="steps"><button class="step active" data-step="1"><span>01</span><b>القالب</b><small>اختيار الهوية</small></button><button class="step" data-step="2"><span>02</span><b>البيانات</b><small>معلومات الخطاب</small></button><button class="step" data-step="3"><span>03</span><b>المحتوى</b><small>النص والتواصل</small></button></div>
+  <div class="editor-body">
+   <div class="pane active" data-pane="1"><div class="pane-title"><span>نوع الخطاب</span><small>اختر التصميم المناسب</small></div><div id="templateGrid" class="templates"></div><div class="size-box"><div><b>مقاس الورقة</b><small>A4 للخطابات الرسمية · مربع للمشاركات</small></div><div class="seg"><button class="active" data-size="a4">A4</button><button data-size="square">مربع</button></div></div></div>
+   <div class="pane" data-pane="2"><div class="pane-title"><span>بيانات الخطاب</span><small>ستظهر مباشرة في الورقة</small></div><div class="form-grid"><label><span>الجهة <em>*</em></span><input id="recipient" placeholder="مثال: شركة ..."></label><label><span>اسم المسؤول</span><input id="recipientName" placeholder="اختياري"></label><label><span>التاريخ <em>*</em></span><input id="date" type="date"></label><label class="wide"><span>الفعالية / المبادرة <em>*</em></span><input id="eventName" placeholder="اسم الفعالية أو المبادرة"></label><label class="wide"><span id="extraLabel">نوع / شكل الرعاية</span><input id="extraParam"></label><label><span>القيمة</span><input id="value" placeholder="مثال: 10,000 ريال"></label></div></div>
+   <div class="pane" data-pane="3"><div class="pane-title"><span>المحتوى والتواصل</span><small>عدّل النص كما تريد</small></div><label class="message"><span>نص الخطاب</span><textarea id="message" rows="11"></textarea></label><div class="form-grid compact"><label><span>اسم مسؤول العلاقات العامة</span><input id="prName" placeholder="قسم العلاقات العامة"></label><label><span>رقم التواصل</span><input id="prContact" placeholder="05xxxxxxxx"></label><label class="wide"><span>البريد الإلكتروني</span><input id="prEmail" type="email" placeholder="name@example.com"></label></div><label class="toggle"><input id="digitalStamp" type="checkbox" checked><i></i><span><b>ختم PAIC الرقمي</b><small>علامة مرجعية اختيارية داخل الخطاب</small></span></label></div>
+  </div>
+  <div class="editor-footer"><button class="outline" id="prevStep">السابق</button><button class="primary" id="nextStep">التالي <span>←</span></button></div>
+</aside>
+<section class="preview-wrap"><div class="preview-head"><div><span>LIVE PREVIEW</span><b id="previewMeta">A4 · طلب رعاية</b></div><div class="zoom"><button id="zoomOut">−</button><strong id="zoomValue">70%</strong><button id="zoomIn">+</button><button id="fitBtn">ملاءمة</button></div></div><div class="paper-stage" id="paperStage"><div id="paperFrame" class="paper-frame"><article id="paper" class="paper"></article></div></div><div class="preview-foot"><button class="outline" id="copyBtn">نسخ النص</button><button class="outline" id="printBtn">طباعة</button><button class="primary" id="pdfBtn">حفظ PDF</button><button class="primary save" id="saveBtn">حفظ الخطاب</button></div></section>
+</div></section>
+
+<section id="library" class="library-section"><div class="section-head"><div><span class="eyebrow">LIBRARY / 02</span><h2>خطاباتك المحفوظة</h2><p>كل ما حفظته في مكان واحد.</p></div><div class="library-tools"><input id="librarySearch" placeholder="ابحث عن جهة أو رقم أو فعالية"><button class="outline" id="refreshBtn">تحديث</button></div></div><div id="recordsList" class="records"></div></section>
+
+<footer><div class="brand footer-brand"><span class="brand-mark"><img src="assets/logo-club.svg" alt="PAIC"></span><span><b>PAIC</b><small>STUDIO</small></span></div><span>نادي البرمجة والذكاء الاصطناعي · جامعة الطائف</span><span>© 2026</span></footer>
+</div>
+<div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modal-card"><button id="modalClose">×</button><div id="modalContent"></div></div></div>
 <script src="content.js"></script><script src="app.js"></script>
-</body>
-</html>
+</body></html>
