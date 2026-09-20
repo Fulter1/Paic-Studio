@@ -1,3 +1,5 @@
+const CAMEL_TO_SNAKE = value => value.replace(/[A-Z]/g, char => `_${char.toLowerCase()}`);
+
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -7,15 +9,20 @@ function escapeHtml(value) {
 function formatDate(value) {
   if (!value) return '—';
   const date = new Date(`${value}T00:00:00`);
-  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+  return Number.isNaN(date.getTime())
+    ? value
+    : new Intl.DateTimeFormat('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
 }
 
-function uid() {
+function createId() {
   if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
-export const FIELD_IDS = ['recipient', 'recipientName', 'date', 'eventName', 'extraParam', 'value', 'message', 'prName', 'prContact', 'prEmail'];
+export const FIELD_IDS = Object.freeze([
+  'recipient', 'recipientName', 'date', 'eventName', 'extraParam', 'value',
+  'message', 'prName', 'prContact', 'prEmail'
+]);
 
 export function readFields(getValue) {
   return Object.fromEntries(FIELD_IDS.map(id => [id, getValue(id)]));
@@ -35,14 +42,22 @@ export function resolveText(text, getValue) {
     '[القيمة إن وجدت]': getValue('value') || 'القيمة',
     '[القيمة]': getValue('value') || 'القيمة'
   };
-  return Object.entries(replacements).reduce((result, [token, value]) => result.replaceAll(token, value), String(text || ''));
+
+  return Object.entries(replacements).reduce(
+    (result, [token, replacement]) => result.replaceAll(token, replacement),
+    String(text || '')
+  );
+}
+
+export function getRecordValue(record, field) {
+  return record?.[field] ?? record?.[CAMEL_TO_SNAKE(field)] ?? '';
 }
 
 export function buildRecord(state, getValue, ownerId) {
   return {
-    id: state.id || uid(),
+    id: state.id || createId(),
     owner_id: ownerId || '',
-    letter_number: state.number,
+    letter_number: state.number || '',
     template: state.template,
     size: state.size,
     recipient: getValue('recipient').trim(),
@@ -55,40 +70,45 @@ export function buildRecord(state, getValue, ownerId) {
     pr_name: getValue('prName').trim(),
     pr_contact: getValue('prContact').trim(),
     pr_email: getValue('prEmail').trim(),
-    digital_stamp: document.querySelector('#digitalStamp')?.checked !== false
+    digital_stamp: document.querySelector('#digitalStamp')?.checked !== false,
+    updated_at: new Date().toISOString()
   };
 }
 
 export function validateRecord(record) {
-  if (!record.recipient || !record.date || !record.event_name || !record.message) return 'أكمل الجهة والتاريخ والفعالية ونص الخطاب';
+  if (!record.recipient || !record.date || !record.event_name || !record.message) {
+    return 'أكمل الجهة والتاريخ والفعالية ونص الخطاب';
+  }
   if (record.message.length > 12000) return 'نص الخطاب طويل جدًا';
-  if (record.pr_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.pr_email)) return 'تحقق من البريد الإلكتروني';
+  if (record.pr_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.pr_email)) {
+    return 'تحقق من البريد الإلكتروني';
+  }
   return '';
 }
 
 export function buildPaper(record, content) {
-  const template = content.templates[record.template];
-  const paragraphs = resolveText(record.message, id => record[id] ?? record[camelToSnake(id)] ?? '')
+  const template = content.templates[record.template] || content.templates.sponsorship;
+  const resolvedMessage = resolveText(record.message, field => getRecordValue(record, field));
+  const paragraphs = resolvedMessage
     .split(/\n\s*\n+/)
     .filter(Boolean)
     .map(paragraph => `<p>${escapeHtml(paragraph).replaceAll('\n', '<br>')}</p>`)
     .join('');
 
-  const get = key => record[key] || '';
-  const recipient = escapeHtml(get('recipient') || 'اسم الجهة');
-  const recipientName = escapeHtml(get('recipient_name'));
-  const date = escapeHtml(formatDate(get('date')) || 'التاريخ');
-  const number = escapeHtml(get('letter_number') || '—');
-  const event = escapeHtml(get('event_name') || 'اسم الفعالية / المبادرة');
-  const extra = escapeHtml(get('extra_param') || template.defaultExtra);
-  const value = escapeHtml(get('value'));
-  const contact = escapeHtml(get('pr_contact'));
-  const email = escapeHtml(get('pr_email'));
-  const prName = escapeHtml(get('pr_name') || 'قسم العلاقات العامة');
-  const stamp = record.digital_stamp !== false;
+  const recipient = escapeHtml(record.recipient || 'اسم الجهة');
+  const recipientName = escapeHtml(record.recipient_name);
+  const date = escapeHtml(formatDate(record.date) || 'التاريخ');
+  const number = escapeHtml(record.letter_number || '—');
+  const event = escapeHtml(record.event_name || 'اسم الفعالية / المبادرة');
+  const extra = escapeHtml(record.extra_param || template.defaultExtra);
+  const value = escapeHtml(record.value);
+  const contact = escapeHtml(record.pr_contact);
+  const email = escapeHtml(record.pr_email);
+  const prName = escapeHtml(record.pr_name || 'قسم العلاقات العامة');
 
   return `<div class="document ${template.tone}">
-    <div class="document-shape shape-one"></div><div class="document-shape shape-two"></div>
+    <div class="document-shape shape-one"></div>
+    <div class="document-shape shape-two"></div>
     <div class="document-topline"><span>جامعة الطائف</span><span>كلية الحاسبات وتقنية المعلومات</span><span>PAIC</span></div>
     <header class="document-header">
       <img src="assets/logo-university.svg" alt="جامعة الطائف">
@@ -100,10 +120,10 @@ export function buildPaper(record, content) {
     <div class="document-title"><small>${escapeHtml(template.english)}</small><h1>${escapeHtml(template.name)}</h1><strong>${event}</strong></div>
     <div class="document-content">${paragraphs}</div>
     <div class="document-details"><div><small>${escapeHtml(template.label)}</small><strong>${extra}</strong></div>${value ? `<div><small>القيمة</small><strong>${value}</strong></div>` : ''}</div>
-    <footer class="document-footer"><div><strong>${prName}</strong>${contact ? `<span>${contact}</span>` : ''}${email ? `<span>${email}</span>` : ''}</div>${stamp ? `<div class="document-stamp"><span>PAIC</span><strong>${number}</strong><small>DIGITAL</small></div>` : ''}</footer>
+    <footer class="document-footer"><div><strong>${prName}</strong>${contact ? `<span>${contact}</span>` : ''}${email ? `<span>${email}</span>` : ''}</div>${record.digital_stamp !== false ? `<div class="document-stamp"><span>PAIC</span><strong>${number}</strong><small>DIGITAL</small></div>` : ''}</footer>
   </div>`;
 }
 
-function camelToSnake(value) { return value.replace(/[A-Z]/g, char => `_${char.toLowerCase()}`); }
-
-export function copyText(record) { return resolveText(record.message, id => record[id] ?? record[camelToSnake(id)] ?? ''); }
+export function copyText(record) {
+  return resolveText(record.message, field => getRecordValue(record, field));
+}

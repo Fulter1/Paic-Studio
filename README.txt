@@ -1,25 +1,30 @@
-PAIC Studio v19
+PAIC Studio v20
 
-نسخة خفيفة ونظيفة من منصة الخطابات الرسمية لنادي البرمجة والذكاء الاصطناعي بجامعة الطائف.
+نسخة نظيفة وخفيفة لمنصة إنشاء الخطابات الرسمية لنادي البرمجة والذكاء الاصطناعي بجامعة الطائف.
 
-الهيكلة:
-index.html
-style.css
-js/app.js        تشغيل التطبيق والواجهة والأحداث
-js/data.js       الإعدادات والقوالب والنصوص
-js/document.js   بناء الخطاب والتحقق والتنسيق
-js/storage.js    التخزين المحلي والمسودات والترقيم
-js/cloud.js      اتصال Supabase والجلسة
-assets/          الشعارات
-supabase.sql     جداول وسياسات Supabase
-vercel.json      إعدادات Vercel
+المزايا
+- HTML + CSS + JavaScript Modules فقط
+- حفظ محلي تلقائي
+- Supabase Anonymous Auth + RLS للمزامنة السحابية
+- أربعة قوالب رسمية
+- A4 ومربع
+- معاينة مباشرة + Zoom + Fit
+- طباعة / حفظ PDF من المتصفح
+- بحث وفتح وحذف من المحفوظات
+- Dark / Light + Responsive
 
-لا توجد مكتبات خارجية أو Frameworks.
+إعداد Supabase
+1. افتح مشروع Supabase.
+2. من Authentication ثم Providers فعّل Anonymous Sign-Ins.
+3. افتح SQL Editor وشغّل ملف supabase.sql كاملًا.
+4. تأكد أن publishable key الموجود في js/data.js يطابق مشروعك.
+5. ارفع المشروع إلى GitHub ثم اربطه بـ Vercel.
 
-التشغيل:
-1. ارفع الملفات كما هي إلى GitHub.
-2. اربط المستودع مع Vercel.
-3. شغل supabase.sql في SQL Editor إذا لم تكن قاعدة البيانات والسياسات موجودة.
-4. فعّل Anonymous Sign-Ins في Supabase Authentication.
+الأمان
+- لا يوجد secret/service key في الواجهة.
+- RLS مقيد بالمالك وبـ is_anonymous.
+- المفتاح الموجود في المتصفح Publishable key مخصص للتطبيقات العامة مع RLS.
+- لا توجد حسابات أو صلاحيات داخل التطبيق.
 
-المفتاح الموجود في الواجهة هو Publishable Key فقط، وليس Secret/Service Role Key. حماية البيانات تعتمد على RLS في Supabase.
+ملاحظة
+المزامنة السحابية تحتاج تفعيل Anonymous Sign-Ins وتشغيل SQL مرة واحدة. إذا كانت السحابة غير متاحة يستمر التطبيق محليًا ويحافظ على المسودات.

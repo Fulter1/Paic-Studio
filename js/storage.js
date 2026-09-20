@@ -1,4 +1,8 @@
 import { CONFIG } from './data.js';
+
+const recordsKey = `${CONFIG.appKey}_records`;
+const sessionKey = `${CONFIG.appKey}_session`;
+
 function readJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -9,43 +13,48 @@ function readJson(key, fallback) {
 }
 
 function writeJson(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-const recordsKey = `${CONFIG.appKey}_records`;
-const sessionKey = `${CONFIG.appKey}_session`;
-
 function mergeRecords(current, incoming) {
-  const map = new Map(current.map(item => [item.id, item]));
-  incoming.forEach(item => map.set(item.id, { ...map.get(item.id), ...item }));
+  const map = new Map(current.map(record => [record.id, record]));
+  for (const record of incoming) {
+    const existing = map.get(record.id);
+    map.set(record.id, existing ? newer(existing, record) : record);
+  }
   return [...map.values()];
 }
 
-export function getRecords() {
-  return readJson(recordsKey, []);
+function timestamp(record) {
+  const value = record?.updated_at || record?.created_at || 0;
+  const time = Date.parse(value);
+  return Number.isFinite(time) ? time : 0;
 }
 
-export function saveRecords(records) {
-  writeJson(recordsKey, records);
+function newer(a, b) {
+  return timestamp(b) >= timestamp(a) ? { ...a, ...b } : { ...b, ...a };
 }
+
+export function getRecords() { return readJson(recordsKey, []); }
+export function saveRecords(records) { return writeJson(recordsKey, records); }
 
 export function upsertRecord(record) {
-  const records = getRecords();
-  const index = records.findIndex(item => item.id === record.id);
-  if (index === -1) records.unshift(record);
-  else records[index] = { ...records[index], ...record };
-  saveRecords(records);
-  return records;
+  return saveRecords(mergeRecords(getRecords(), [record])) ? getRecords() : getRecords();
 }
 
 export function removeRecord(id) {
-  const records = getRecords().filter(item => item.id !== id);
+  const records = getRecords().filter(record => record.id !== id);
   saveRecords(records);
   return records;
 }
 
 export function getDraft() { return readJson(CONFIG.draftKey, null); }
-export function saveDraft(draft) { writeJson(CONFIG.draftKey, draft); }
+export function saveDraft(draft) { return writeJson(CONFIG.draftKey, draft); }
 export function clearDraft() { localStorage.removeItem(CONFIG.draftKey); }
 
 export function getDeleteQueue() { return readJson(CONFIG.deleteQueueKey, []); }
@@ -54,17 +63,15 @@ export function queueDelete(id) {
   if (!queue.includes(id)) queue.push(id);
   writeJson(CONFIG.deleteQueueKey, queue);
 }
-export function dequeueDelete(id) {
-  writeJson(CONFIG.deleteQueueKey, getDeleteQueue().filter(item => item !== id));
-}
+export function dequeueDelete(id) { writeJson(CONFIG.deleteQueueKey, getDeleteQueue().filter(item => item !== id)); }
 
 export function getSession() { return readJson(sessionKey, null); }
 export function saveSession(session) {
-  if (!session?.access_token || !session?.refresh_token) return;
-  writeJson(sessionKey, {
+  if (!session?.access_token) return false;
+  return writeJson(sessionKey, {
     access_token: session.access_token,
-    refresh_token: session.refresh_token,
-    user: session.user ?? null
+    refresh_token: session.refresh_token || '',
+    user: session.user || null
   });
 }
 export function clearSession() { localStorage.removeItem(sessionKey); }
@@ -95,8 +102,10 @@ export function nextLetterNumber() {
 export function migrateLegacyStorage() {
   const existing = getRecords();
   if (existing.length) return existing;
+
   const legacy = CONFIG.legacyKeys.flatMap(key => readJson(`${key}_records`, []) || []);
   if (!legacy.length) return [];
+
   const migrated = mergeRecords([], legacy);
   saveRecords(migrated);
   syncSequence(migrated);

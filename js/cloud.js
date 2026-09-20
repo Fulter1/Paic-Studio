@@ -2,9 +2,10 @@ import { CONFIG } from './data.js';
 import { clearSession, getSession, saveSession } from './storage.js';
 
 let session = null;
+let authPromise = null;
 
-function authBase() { return `${CONFIG.supabase.url}/auth/v1`; }
-function restBase() { return `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.table}`; }
+const authBase = () => `${CONFIG.supabase.url}/auth/v1`;
+const restBase = () => `${CONFIG.supabase.url}/rest/v1/${CONFIG.supabase.table}`;
 
 async function request(url, options = {}, timeout = CONFIG.requestTimeout) {
   const controller = new AbortController();
@@ -16,59 +17,80 @@ async function request(url, options = {}, timeout = CONFIG.requestTimeout) {
   }
 }
 
-function authHeaders(extra = {}) {
-  return { apikey: CONFIG.supabase.key, ...extra };
+const baseHeaders = extra => ({ apikey: CONFIG.supabase.key, ...extra });
+
+export function getUserId() {
+  return session?.user?.id || '';
 }
 
-export function getUserId() { return session?.user?.id || ''; }
-
-export async function authenticate() {
-  if (session?.access_token) return session;
-  const stored = getSession();
-
-  if (stored?.access_token) {
-    session = stored;
-    try {
-      const response = await request(`${authBase()}/user`, { headers: authHeaders({ Authorization: `Bearer ${session.access_token}` }) });
-      if (response.ok) {
-        session.user = await response.json();
-        saveSession(session);
-        return session;
-      }
-    } catch {}
-
-    if (stored.refresh_token) {
-      try {
-        const response = await request(`${authBase()}/token?grant_type=refresh_token`, {
-          method: 'POST',
-          headers: authHeaders({ 'Content-Type': 'application/json' }),
-          body: JSON.stringify({ refresh_token: stored.refresh_token })
-        });
-        if (response.ok) {
-          session = await response.json();
-          saveSession(session);
-          return session;
-        }
-      } catch {}
-    }
-    clearSession();
-    session = null;
+async function validateStoredSession(stored) {
+  try {
+    const response = await request(`${authBase()}/user`, {
+      headers: baseHeaders({ Authorization: `Bearer ${stored.access_token}` })
+    });
+    if (!response.ok) return false;
+    const user = await response.json();
+    session = { ...stored, user };
+    saveSession(session);
+    return true;
+  } catch {
+    return false;
   }
+}
 
+async function refreshStoredSession(refreshToken) {
+  try {
+    const response = await request(`${authBase()}/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: baseHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ refresh_token: refreshToken })
+    });
+    if (!response.ok) return false;
+    session = await response.json();
+    saveSession(session);
+    return Boolean(session?.access_token && session?.user?.id);
+  } catch {
+    return false;
+  }
+}
+
+async function createAnonymousSession() {
   const response = await request(`${authBase()}/signup`, {
     method: 'POST',
-    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    headers: baseHeaders({ 'Content-Type': 'application/json' }),
     body: '{}'
   });
-  if (!response.ok) throw new Error('تعذر إنشاء جلسة مجهولة');
+  if (!response.ok) throw new Error('ANONYMOUS_AUTH_DISABLED');
   session = await response.json();
+  if (!session?.access_token || !session?.user?.id) throw new Error('INVALID_AUTH_SESSION');
   saveSession(session);
   return session;
 }
 
+export async function authenticate() {
+  if (session?.access_token && session?.user?.id) return session;
+  if (authPromise) return authPromise;
+
+  authPromise = (async () => {
+    const stored = getSession();
+    if (stored?.access_token) {
+      if (await validateStoredSession(stored)) return session;
+      if (stored.refresh_token && await refreshStoredSession(stored.refresh_token)) return session;
+      clearSession();
+    }
+    return createAnonymousSession();
+  })();
+
+  try {
+    return await authPromise;
+  } finally {
+    authPromise = null;
+  }
+}
+
 export async function requestCloud(path = '', options = {}, allowAuthRetry = true) {
   await authenticate();
-  if (!session?.access_token) throw new Error('لا توجد جلسة سحابية');
+  if (!session?.access_token) throw new Error('NO_SESSION');
 
   const headers = {
     apikey: CONFIG.supabase.key,
@@ -80,13 +102,18 @@ export async function requestCloud(path = '', options = {}, allowAuthRetry = tru
   const response = await request(`${restBase()}${path}`, { ...options, headers });
 
   if (response.status === 401 && allowAuthRetry) {
-    clearSession();
     session = null;
+    clearSession();
     await authenticate();
     return requestCloud(path, options, false);
   }
 
-  if (!response.ok) throw new Error(await response.text());
+  if (!response.ok) {
+    const error = new Error(`SUPABASE_${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+
   const text = await response.text();
   return text ? JSON.parse(text) : [];
 }
