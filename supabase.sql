@@ -1,88 +1,47 @@
--- PAIC Studio — Supabase setup
--- Run this once in Supabase SQL Editor.
--- Enable Authentication > Providers > Anonymous Sign-Ins before using cloud sync.
-
 create table if not exists public.paic_letters_v13 (
   id uuid primary key,
-  owner_id uuid not null,
+  owner_id uuid not null references auth.users(id) on delete cascade,
   letter_number text not null,
-  template text not null check (template in ('sponsorship','partnership','invitation','thanks')),
-  size text not null check (size in ('a4','square')),
-  recipient text not null check (char_length(recipient) between 1 and 180),
-  recipient_name text check (recipient_name is null or char_length(recipient_name) <= 180),
+  template text not null,
+  size text not null default 'a4',
+  recipient text not null,
+  recipient_name text,
   date date not null,
-  event_name text not null check (char_length(event_name) between 1 and 220),
-  extra_param text check (extra_param is null or char_length(extra_param) <= 220),
-  value text check (value is null or char_length(value) <= 100),
-  message text not null check (char_length(message) between 1 and 12000),
-  pr_name text check (pr_name is null or char_length(pr_name) <= 120),
-  pr_contact text check (pr_contact is null or char_length(pr_contact) <= 40),
-  pr_email text check (pr_email is null or char_length(pr_email) <= 180),
+  event_name text not null,
+  extra_param text,
+  value text,
+  message text not null,
+  pr_name text,
+  pr_contact text,
+  pr_email text,
   digital_stamp boolean not null default true,
-  created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 alter table public.paic_letters_v13 enable row level security;
 revoke all on table public.paic_letters_v13 from anon;
-grant select, insert, update, delete on table public.paic_letters_v13 to authenticated;
+grant select,insert,update,delete on table public.paic_letters_v13 to authenticated;
 
-drop policy if exists paic_v13_select_own on public.paic_letters_v13;
-drop policy if exists paic_v13_insert_own on public.paic_letters_v13;
-drop policy if exists paic_v13_update_own on public.paic_letters_v13;
-drop policy if exists paic_v13_delete_own on public.paic_letters_v13;
+drop policy if exists paic_letters_select on public.paic_letters_v13;
+drop policy if exists paic_letters_insert on public.paic_letters_v13;
+drop policy if exists paic_letters_update on public.paic_letters_v13;
+drop policy if exists paic_letters_delete on public.paic_letters_v13;
 
-create policy paic_v13_select_own
-on public.paic_letters_v13 for select to authenticated
-using (
-  owner_id = auth.uid()
-  and coalesce((auth.jwt()->>'is_anonymous')::boolean, false) = true
-);
+create policy paic_letters_select on public.paic_letters_v13 for select to authenticated using (owner_id = auth.uid() and (auth.jwt()->>'is_anonymous')::boolean = true);
+create policy paic_letters_insert on public.paic_letters_v13 for insert to authenticated with check (owner_id = auth.uid() and (auth.jwt()->>'is_anonymous')::boolean = true);
+create policy paic_letters_update on public.paic_letters_v13 for update to authenticated using (owner_id = auth.uid() and (auth.jwt()->>'is_anonymous')::boolean = true) with check (owner_id = auth.uid() and (auth.jwt()->>'is_anonymous')::boolean = true);
+create policy paic_letters_delete on public.paic_letters_v13 for delete to authenticated using (owner_id = auth.uid() and (auth.jwt()->>'is_anonymous')::boolean = true);
 
-create policy paic_v13_insert_own
-on public.paic_letters_v13 for insert to authenticated
-with check (
-  owner_id = auth.uid()
-  and coalesce((auth.jwt()->>'is_anonymous')::boolean, false) = true
-);
+create unique index if not exists paic_letters_owner_number_idx on public.paic_letters_v13(owner_id, letter_number);
+create index if not exists paic_letters_owner_updated_idx on public.paic_letters_v13(owner_id, updated_at desc);
 
-create policy paic_v13_update_own
-on public.paic_letters_v13 for update to authenticated
-using (
-  owner_id = auth.uid()
-  and coalesce((auth.jwt()->>'is_anonymous')::boolean, false) = true
-)
-with check (
-  owner_id = auth.uid()
-  and coalesce((auth.jwt()->>'is_anonymous')::boolean, false) = true
-);
-
-create policy paic_v13_delete_own
-on public.paic_letters_v13 for delete to authenticated
-using (
-  owner_id = auth.uid()
-  and coalesce((auth.jwt()->>'is_anonymous')::boolean, false) = true
-);
-
-create unique index if not exists paic_v13_owner_number_idx
-on public.paic_letters_v13(owner_id, letter_number);
-
-create index if not exists paic_v13_owner_updated_idx
-on public.paic_letters_v13(owner_id, updated_at desc);
-
-create or replace function public.paic_v13_touch_updated_at()
-returns trigger
-language plpgsql
-security invoker
-set search_path = public
-as $$
+create or replace function public.paic_letters_touch_updated_at()
+returns trigger language plpgsql security invoker as $$
 begin
   new.updated_at = now();
   return new;
 end;
 $$;
 
-drop trigger if exists paic_v13_set_updated_at on public.paic_letters_v13;
-create trigger paic_v13_set_updated_at
-before update on public.paic_letters_v13
-for each row execute function public.paic_v13_touch_updated_at();
+drop trigger if exists paic_letters_touch on public.paic_letters_v13;
+create trigger paic_letters_touch before update on public.paic_letters_v13 for each row execute function public.paic_letters_touch_updated_at();
