@@ -1,32 +1,32 @@
-PAIC Studio 2.0 — rebuilt from scratch.
+PAIC Studio 3.0 — clean rebuild
 
-Structure:
-- index.html
-- css/app.css
-- js/config.js
-- js/templates.js
-- js/store.js
-- js/cloud.js
-- js/document.js
-- js/main.js
-- assets/
-- supabase.sql
-- vercel.json
+Static HTML/CSS/JavaScript modules. No framework or build step.
 
-Features:
-- RTL Arabic workspace with right sidebar
-- Dashboard / Editor / Library / Templates / Snippets / Settings
+Pages:
+- Dashboard
+- Letter Editor
+- Letter Library
+- Template Studio
+- Content/Snippets Library
+- Settings
+
+Core features:
+- Four visual templates
+- A4 and square output
+- Live preview and zoom
+- Auto-save drafts
+- Local-first storage
+- Supabase anonymous cloud sync + RLS
+- Ready-made text snippets + custom snippets
+- Duplicate/edit/delete/search letters
+- Print / Save as PDF
 - Dark / Light / System theme
-- Four visual document templates
-- Ready snippets + custom snippets
-- Autosave draft + local library
-- Supabase anonymous sync + RLS
-- A4 and 1:1 preview
-- Print / PDF via browser print
+- Responsive mobile navigation
 
-Cloud setup:
-1. Enable Anonymous Sign-Ins in Supabase Authentication.
-2. Run supabase.sql in SQL Editor.
-3. Deploy the folder to GitHub/Vercel.
+Supabase setup:
+1. Enable Anonymous Sign-Ins in Authentication.
+2. Run supabase.sql once in SQL Editor.
+3. Keep the publishable key in js/config.js; never use a service_role/secret key.
+4. Deploy the folder to GitHub/Vercel.
 
-The browser key is a publishable key. Do not replace it with a service_role or secret key.
+If Supabase is unavailable, local storage continues to work.
